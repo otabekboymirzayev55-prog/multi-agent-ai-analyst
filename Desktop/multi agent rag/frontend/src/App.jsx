@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Send, Bot, User, Loader2, Activity } from "lucide-react";
 
-const API = "http://localhost:8000";
+const API = "https://multi-agent-ai-analyst-jw34.onrender.com";
 
 export default function App() {
   const [messages, setMessages] = useState([
