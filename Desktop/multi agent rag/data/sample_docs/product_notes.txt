@@ -1,0 +1,20 @@
+Product Overview — Internal Reference
+
+Our product has three pricing tiers: Starter ($99/month), Pro ($499/month), and
+Enterprise ($1,499/month). Starter customers get core reporting features only.
+Pro customers get the reporting dashboard plus the inventory integration and
+priority support. Enterprise customers get everything in Pro plus a dedicated
+account manager and custom SLAs.
+
+The reporting dashboard is the most-used feature across all tiers. In Q1 2025 we
+shipped a performance upgrade to the dashboard, but a regression in Q2 2025
+temporarily slowed page-load times for some Starter accounts before it was fixed
+in June 2025.
+
+The inventory integration was requested most often by Pro-tier retail and food
+customers. It became generally available in July 2025, after several customers
+had already left without it.
+
+Customer success runs a re-engagement email sequence for any account with no
+login activity for 30 days, followed by a second email at 45 days if there is
+still no activity.

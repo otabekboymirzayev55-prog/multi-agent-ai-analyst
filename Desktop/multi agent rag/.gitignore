@@ -1,0 +1,17 @@
+# Never upload these!
+.env
+.venv/
+venv/
+.venv-1/
+
+# Data files (too large)
+data/qdrant_db/
+
+# Junk files
+__pycache__/
+*.pyc
+.cursor/
+debug-*.log
+*.ipynb
+node_modules/
+frontend/dist/

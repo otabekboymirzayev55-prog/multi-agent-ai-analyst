@@ -1,0 +1,21 @@
+# --- Phase 1: foundation ---
+python-dotenv==1.0.1
+langchain==0.3.7
+langchain-community==0.3.7
+langchain-openai==0.2.9
+langchain-text-splitters==0.3.2
+qdrant-client==1.12.1
+langchain-qdrant==0.2.0
+
+# --- Phase 2: specialist agents ---
+tavily-python==0.5.0
+langchain-experimental==0.3.3
+pydantic==2.9.2
+
+# --- Phase 3: orchestration ---
+langgraph==0.2.53
+
+# --- Phase 4: observability (optional) ---
+langfuse>=2.0.0
+fastapi==0.141.1
+uvicorn==0.52.0

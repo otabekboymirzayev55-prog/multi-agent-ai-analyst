@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: multi-agent-ai-analyst-api
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn api.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: TAVILY_API_KEY
+        sync: false
+      - key: PYTHONIOENCODING
+        value: utf-8
+      - key: RECURSION_LIMIT
+        value: 25

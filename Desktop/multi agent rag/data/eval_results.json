@@ -1,0 +1,191 @@
+{
+  "timestamp": "2026-07-28T13:47:28.357888",
+  "total_questions": 5,
+  "avg_keyword_score": 40.0,
+  "avg_agent_score": 60.0,
+  "critic_pass_rate": 100.0,
+  "results": [
+    {
+      "id": "Q1",
+      "question": "How many customers have churned?",
+      "answer": "5 customers have churned.",
+      "steps": [
+        "supervisor→data",
+        "data(sql)",
+        "supervisor→finish",
+        "generate",
+        "critic(ok)"
+      ],
+      "keyword_score": {
+        "hits": [
+          "5"
+        ],
+        "misses": [],
+        "score": 1.0
+      },
+      "agent_score": {
+        "hits": [
+          "data"
+        ],
+        "misses": [],
+        "score": 1.0
+      },
+      "critic_ok": true,
+      "revisions": 0,
+      "elapsed_seconds": 7.4
+    },
+    {
+      "id": "Q2",
+      "question": "Why did customers churn last quarter?",
+      "answer": "The provided evidence does not contain the results of the SQL query, so I cannot determine why customers churned last quarter. Please provide the output of the query so I can analyze the churn counts and lost revenue by plan.",
+      "steps": [
+        "supervisor→data",
+        "data(sql)",
+        "supervisor→data",
+        "data(sql)",
+        "supervisor→data",
+        "data(sql)",
+        "supervisor→data",
+        "data(sql)",
+        "supervisor→data",
+        "data(sql)",
+        "supervisor→data",
+        "data(sql)",
+        "supervisor→data",
+        "data(sql)",
+        "supervisor→data",
+        "data(sql)",
+        "supervisor→data",
+        "data(sql)",
+        "supervisor→finish",
+        "generate",
+        "critic(ok)"
+      ],
+      "keyword_score": {
+        "hits": [],
+        "misses": [
+          "price",
+          "usage",
+          "integration"
+        ],
+        "score": 0.0
+      },
+      "agent_score": {
+        "hits": [],
+        "misses": [
+          "retriever"
+        ],
+        "score": 0.0
+      },
+      "critic_ok": true,
+      "revisions": 0,
+      "elapsed_seconds": 83.2
+    },
+    {
+      "id": "Q3",
+      "question": "Which pricing plan had the most churn?",
+      "answer": "The pricing plan with the most churn is the Starter plan.",
+      "steps": [
+        "supervisor→data",
+        "data(sql)",
+        "supervisor→finish",
+        "generate",
+        "critic(ok)"
+      ],
+      "keyword_score": {
+        "hits": [
+          "starter"
+        ],
+        "misses": [],
+        "score": 1.0
+      },
+      "agent_score": {
+        "hits": [
+          "data"
+        ],
+        "misses": [
+          "retriever"
+        ],
+        "score": 0.5
+      },
+      "critic_ok": true,
+      "revisions": 0,
+      "elapsed_seconds": 65.3
+    },
+    {
+      "id": "Q4",
+      "question": "What is the monthly revenue from Enterprise customers?",
+      "answer": "The monthly revenue from Enterprise customers is $2,998.00.",
+      "steps": [
+        "supervisor→retriever",
+        "retriever",
+        "supervisor→code",
+        "code",
+        "supervisor→code",
+        "code",
+        "supervisor→code",
+        "code",
+        "supervisor→code",
+        "code",
+        "supervisor→code",
+        "code",
+        "supervisor→data",
+        "data(sql)",
+        "supervisor→finish",
+        "generate",
+        "critic(ok)"
+      ],
+      "keyword_score": {
+        "hits": [],
+        "misses": [
+          "1499",
+          "2998"
+        ],
+        "score": 0.0
+      },
+      "agent_score": {
+        "hits": [
+          "data"
+        ],
+        "misses": [],
+        "score": 1.0
+      },
+      "critic_ok": true,
+      "revisions": 0,
+      "elapsed_seconds": 83.2
+    },
+    {
+      "id": "Q5",
+      "question": "How many customers churned and what were the main reasons?",
+      "answer": "Five customers have churned. The provided data does not specify the reasons for their churn.",
+      "steps": [
+        "supervisor→data",
+        "data(sql)",
+        "supervisor→finish",
+        "generate",
+        "critic(ok)"
+      ],
+      "keyword_score": {
+        "hits": [],
+        "misses": [
+          "5",
+          "price",
+          "usage"
+        ],
+        "score": 0.0
+      },
+      "agent_score": {
+        "hits": [
+          "data"
+        ],
+        "misses": [
+          "retriever"
+        ],
+        "score": 0.5
+      },
+      "critic_ok": true,
+      "revisions": 0,
+      "elapsed_seconds": 4.8
+    }
+  ]
+}

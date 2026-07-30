@@ -1,0 +1,32 @@
+[
+  {
+    "id": "Q1",
+    "question": "How many customers have churned?",
+    "expected_keywords": ["5"],
+    "expected_agents": ["data"]
+  },
+  {
+    "id": "Q2",
+    "question": "Why did customers churn last quarter?",
+    "expected_keywords": ["price", "usage", "integration"],
+    "expected_agents": ["retriever"]
+  },
+  {
+    "id": "Q3",
+    "question": "Which pricing plan had the most churn?",
+    "expected_keywords": ["starter"],
+    "expected_agents": ["data", "retriever"]
+  },
+  {
+    "id": "Q4",
+    "question": "What is the monthly revenue from Enterprise customers?",
+    "expected_keywords": ["1499", "2998"],
+    "expected_agents": ["data"]
+  },
+  {
+    "id": "Q5",
+    "question": "How many customers churned and what were the main reasons?",
+    "expected_keywords": ["5", "price", "usage"],
+    "expected_agents": ["data", "retriever"]
+  }
+]

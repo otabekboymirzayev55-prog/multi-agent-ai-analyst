@@ -1,0 +1,27 @@
+Q2 2025 Customer Churn Notes — Internal Summary
+
+Blue Harbor Inc (Starter plan) churned in April 2025. Exit interview notes indicate
+the primary reason was price sensitivity — the customer said a competitor offered a
+similar tool at a lower monthly cost, and Blue Harbor's usage had been declining for
+two months before cancellation.
+
+Crestline Foods (Pro plan) churned in May 2025. Their support tickets show repeated
+complaints about a missing integration with their inventory system. The sales team
+had promised a workaround that was never delivered, which was the stated reason for
+leaving in their cancellation survey.
+
+Ember Studio (Starter plan) churned in April 2025 due to low product usage. Login
+logs show the account was nearly inactive for the six weeks before cancellation.
+The customer did not respond to two re-engagement emails.
+
+Harborlight Co (Starter plan) churned in May 2025. Their stated reason was budget
+cuts following a change in company leadership, unrelated to product satisfaction.
+
+Junction Media (Starter plan) churned in May 2025. Support notes mention frequent
+complaints about slow page-load times in the reporting dashboard, which the
+engineering team confirmed was a real performance issue during that period.
+
+General pattern: most churn this quarter came from the Starter plan, and the two
+most common reasons were (1) price sensitivity relative to competitors and
+(2) low engagement/usage before cancellation. Only one case (Crestline) involved a
+missing feature, and only one case (Harborlight) was unrelated to the product.
