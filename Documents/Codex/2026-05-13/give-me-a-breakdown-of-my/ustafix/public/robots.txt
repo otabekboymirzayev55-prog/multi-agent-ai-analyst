@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://ustafix.uz/sitemap.xml
