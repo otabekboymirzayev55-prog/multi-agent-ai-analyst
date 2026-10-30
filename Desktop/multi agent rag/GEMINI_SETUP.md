@@ -11,3 +11,7 @@ Run `python -m src.ingest` once after adding the key. The sample documents are s
 Restart the API, then verify a real `/chat` question. The frontend requires no provider credential changes. Deploy the backend with the same Google variables and index before declaring the AI demo operational.
 
 Official reference: https://ai.google.dev/gemini-api/docs/openai.
+
+## Windows local launch
+
+After configuring `.env`, installing dependencies and building the Google index, run `./start.ps1` from this folder. It starts background processes and stores logs under ignored `.run/`. Never upload `.env` or your private index. These localhost URLs are available only while this computer and the processes are running. Render uses its own secret settings; local `.env` is not transferred automatically.

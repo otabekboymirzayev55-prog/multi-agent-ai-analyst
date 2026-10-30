@@ -24,9 +24,13 @@ def critic(state: AgentState) -> dict:
         "Reply ONLY: YES or NO"
     )
     raw = _llm.invoke(prompt).content.strip().upper()
-    approved = raw.startswith("YES")
+    approved = raw == "YES"
     tag = "ok" if approved else "revise"
+    update = {}
+    if not approved and state.get('revisions', 0) + 1 >= 2:
+        update['answer'] = "I couldn't verify an answer from the available evidence. Please narrow the question or provide more relevant documents."
     return {
+        **update,
         "critic_ok": approved,
         "revisions": state.get("revisions", 0) + (0 if approved else 1),
         "steps": state.get("steps", []) + [f"critic({tag})"],

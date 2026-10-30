@@ -51,3 +51,35 @@ def test_existing_index_is_not_deleted(tmp_path, monkeypatch):
     with pytest.raises(RuntimeError, match='already exists'):
         ingest.main()
     assert sentinel.read_text() == 'keep'
+
+def test_document_churn_reasons_do_not_route_to_sql(monkeypatch):
+    monkeypatch.setattr(config, 'GOOGLE_API_KEY', 'test-google-key')
+    from src.agents import supervisor as router
+    from src.state import new_state
+    fake = Mock()
+    monkeypatch.setattr(router, '_llm', fake)
+    result = router.supervisor(new_state('Use company documents: why did Blue Harbor churn?'))
+    assert result['plan'] == 'retriever'
+    fake.invoke.assert_not_called()
+
+def test_mixed_question_collects_documents_and_sql(monkeypatch):
+    monkeypatch.setattr(config, 'GOOGLE_API_KEY', 'test-google-key')
+    from src.agents import supervisor as router
+    from src.state import new_state
+    state = new_state('How many customers churned and what were the reasons?')
+    state.update(documents=['Cancellation notes'], steps=['supervisor→retriever', 'retriever'])
+    assert router.supervisor(state)['plan'] == 'data'
+
+def test_rejected_final_draft_is_not_returned(monkeypatch):
+    monkeypatch.setattr(config, 'GOOGLE_API_KEY', 'test-google-key')
+    from src.agents import critic
+    from src.state import new_state
+    fake = Mock()
+    fake.invoke.return_value.content = 'NO'
+    monkeypatch.setattr(critic, '_llm', fake)
+    state = new_state('Question')
+    state.update(answer='Unsupported claim', revisions=1)
+    result = critic.critic(state)
+    assert result['critic_ok'] is False
+    assert 'Unsupported claim' not in result['answer']
+    assert "couldn't verify" in result['answer']

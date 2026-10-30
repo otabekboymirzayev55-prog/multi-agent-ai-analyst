@@ -1,5 +1,5 @@
 from src.llm import create_chat_model
-import os
+import re
 """
 Feature 7: Supervisor / Router.
 Routes question to the right agent. Forces finish if agents already ran.
@@ -20,6 +20,18 @@ def supervisor(state: AgentState) -> dict:
             "plan": "finish",
             "steps": steps + ["supervisor→finish(forced)"]
         }
+
+    # Explicit document requests and causal explanations need textual evidence;
+    # SQL alone can count churn but cannot explain cancellation reasons.
+    question = state['question'].lower()
+    needs_docs = bool(re.search(r"\b(document\w*|polic\w*|notes|why|reasons?)\b", question))
+    needs_data = bool(re.search(r"\b(database|sql|revenue|how many|count|total|average)\b", question))
+    required = []
+    if needs_docs: required.append(('retriever', bool(state.get('documents'))))
+    if needs_data: required.append(('data', bool(state.get('sql_result'))))
+    for route, available in required:
+        if not available and agent_counts[route] == 0:
+            return {'plan': route, 'steps': steps + [f'supervisor→{route}']}
 
     # ── Also force finish if we already have useful results ──
     has_results = (
@@ -48,7 +60,7 @@ def supervisor(state: AgentState) -> dict:
         f"Code result: {state.get('code_result')}\n\n"
         "Pick ONE agent to run next, or say finish if you have enough info.\n"
         "Rules:\n"
-        "- Questions about customers/revenue/churn → data\n"
+        "- Quantitative customer/revenue/churn questions → data; cancellation reasons → retriever\n"
         "- Questions about documents/policies → retriever\n"
         "- Questions needing current info → web\n"
         "- Questions needing calculation → code\n"
