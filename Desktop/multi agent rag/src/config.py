@@ -12,24 +12,22 @@ from dotenv import load_dotenv
 
 load_dotenv(BASE_DIR / ".env")
 
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-PROXY_BASE_URL = os.getenv("PROXY_BASE_URL", "https://saidazam-litellm-proxy.hf.space/v1")
-GEMINI_MODEL = os.getenv("GEMINI_MODEL")
-GEMINI_LITE_MODEL = os.getenv("GEMINI_LITE_MODEL")
-GEMINI_EMBED_MODEL = os.getenv("GEMINI_EMBED_MODEL")
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai/"
+CHAT_MODEL = os.getenv("GOOGLE_CHAT_MODEL", "gemini-3.5-flash-lite")
+EMBED_MODEL = os.getenv("GOOGLE_EMBED_MODEL", "gemini-embedding-001")
+INDEX_VERSION = os.getenv("GOOGLE_INDEX_VERSION", "v1")
 TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
 LANGFUSE_PUBLIC_KEY = os.getenv("LANGFUSE_PUBLIC_KEY")
 LANGFUSE_SECRET_KEY = os.getenv("LANGFUSE_SECRET_KEY")
-
-VECTOR_DB_PATH = str(BASE_DIR / "data/qdrant_db")
-COLLECTION_NAME = "company_docs"
+VECTOR_DB_PATH = str(BASE_DIR / "data" / ("qdrant_google_" + EMBED_MODEL.replace("-", "_") + "_" + INDEX_VERSION))
+COLLECTION_NAME = "company_docs_google_" + EMBED_MODEL.replace("-", "_") + "_" + INDEX_VERSION
 SQLITE_DB_PATH = str(BASE_DIR / "data/company.db")
 
-if not GEMINI_API_KEY:
-    raise RuntimeError(
-        "GEMINI_API_KEY is missing. Copy .env.example to .env and paste in "
-        "the key your mentor gave you."
-    )
+def require_google_key():
+    if not GOOGLE_API_KEY:
+        raise RuntimeError("GOOGLE_API_KEY is missing. Add a Google AI Studio key to the server environment.")
+    return GOOGLE_API_KEY
 
 # --- Feature 12: Langfuse tracing (optional) ---
 # If keys are present, patch LangChain so every call is automatically traced.

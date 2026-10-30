@@ -1,6 +1,8 @@
 """Public API with isolated, bounded in-memory chat sessions."""
 import os
 import logging
+from pathlib import Path
+from dotenv import load_dotenv
 from collections import OrderedDict
 from functools import lru_cache
 from threading import Lock
@@ -10,7 +12,9 @@ from fastapi import FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
-app = FastAPI(title="Multi-Agent AI Analyst", version="1.1.0")
+load_dotenv(Path(__file__).resolve().parents[1] / '.env')
+
+app = FastAPI(title="Multi-Agent AI Analyst", version="1.2.0")
 origins = os.getenv('ALLOWED_ORIGINS', 'https://multi-agent-ai-analyst-ui.onrender.com,http://localhost:5173').split(',')
 app.add_middleware(CORSMiddleware, allow_origins=[o.strip() for o in origins], allow_credentials=False, allow_methods=['GET','POST'], allow_headers=['Content-Type','X-Session-ID'])
 histories = OrderedDict()
@@ -34,7 +38,7 @@ def get_graph():
 
 @app.get('/health')
 def health():
-    return {'status': 'ok', 'configured': bool(os.getenv('GEMINI_API_KEY')), 'version': '1.1.0'}
+    return {'status': 'ok', 'configured': bool(os.getenv('GOOGLE_API_KEY')), 'version': '1.2.0', 'provider': 'google-gemini'}
 
 @app.get('/history')
 def history(session_id: Session = None):

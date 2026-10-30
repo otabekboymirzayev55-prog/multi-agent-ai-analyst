@@ -3,23 +3,27 @@ Feature 3: Retriever agent.
 Given a question, returns the top-k most relevant chunks from the vector
 store built by src/ingest.py. This answers "from your documents" questions.
 
-PROXY UPDATE: now uses OpenAIEmbeddings pointed at the mentor's proxy
-instead of calling Google directly. Model: gemini-embedding.
+Uses Google's official endpoint and a separate Google embedding index.
 """
-from langchain_openai import OpenAIEmbeddings
 from langchain_qdrant import QdrantVectorStore
 from qdrant_client import QdrantClient
+from pathlib import Path
 
-from src.config import GEMINI_API_KEY, PROXY_BASE_URL, VECTOR_DB_PATH, COLLECTION_NAME
+from src.config import VECTOR_DB_PATH, COLLECTION_NAME
+from src.llm import create_embeddings
 from src.state import AgentState
 
 
 def _get_vectorstore():
-    embeddings = OpenAIEmbeddings(
-        base_url=PROXY_BASE_URL, api_key=GEMINI_API_KEY, model="gemini-embedding"
-    )
+    if not Path(VECTOR_DB_PATH).is_dir():
+        raise RuntimeError("Google document index is missing. Run python -m src.ingest first.")
+    embeddings = create_embeddings()
     client = QdrantClient(path=VECTOR_DB_PATH)
-    return QdrantVectorStore(client=client, collection_name=COLLECTION_NAME, embedding=embeddings)
+    try:
+        return QdrantVectorStore(client=client, collection_name=COLLECTION_NAME, embedding=embeddings)
+    except Exception:
+        client.close()
+        raise
 
 
 def retriever_agent(state: AgentState) -> dict:

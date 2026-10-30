@@ -7,8 +7,12 @@ services:
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn api.main:app --host 0.0.0.0 --port $PORT
     envVars:
-      - key: GEMINI_API_KEY
+      - key: GOOGLE_API_KEY
         sync: false
+      - key: GOOGLE_CHAT_MODEL
+        value: gemini-3.5-flash-lite
+      - key: GOOGLE_EMBED_MODEL
+        value: gemini-embedding-001
       - key: TAVILY_API_KEY
         sync: false
       - key: PYTHONIOENCODING

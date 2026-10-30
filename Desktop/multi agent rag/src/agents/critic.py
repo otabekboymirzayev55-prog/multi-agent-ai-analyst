@@ -1,14 +1,13 @@
+from src.llm import create_chat_model
 import os
 """
 Feature 8: Critic / Verifier.
 Checks the drafted answer against evidence. Approves or sends back for revision.
 Uses plain text parsing instead of structured output (proxy compatibility).
 """
-from langchain_openai import ChatOpenAI
-from src.config import GEMINI_API_KEY, PROXY_BASE_URL
 from src.state import AgentState
 
-_llm = ChatOpenAI(base_url=PROXY_BASE_URL, api_key=GEMINI_API_KEY, model=os.getenv("GEMINI_MODEL", "gemini-flash-lite"), timeout=15, max_retries=0)
+_llm = create_chat_model()
 
 def critic(state: AgentState) -> dict:
     evidence = "\n\n".join(state.get("documents", []))

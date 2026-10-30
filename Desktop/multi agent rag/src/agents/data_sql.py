@@ -1,3 +1,4 @@
+from src.llm import create_chat_model
 import os
 """
 Feature 5: Data agent (text-to-SQL).
@@ -5,19 +6,18 @@ Writes a SQL query from a plain-English question, runs it against the
 sample company.db database, and returns the result. This is how the
 system answers "how many...", "average...", "total..." questions.
 
-PROXY UPDATE: now uses ChatOpenAI pointed at the mentor's proxy instead
-of calling Google directly. Model: gemini-flash-lite (per mentor's spec —
+PROXY UPDATE: now uses ChatOpenAI pointed at the official Gemini API instead
+of calling Google directly. Model: gemini-3.5-flash-lite (per mentor's spec —
 high-volume calls use the lighter model).
 """
 from langchain_community.utilities import SQLDatabase
-from langchain_openai import ChatOpenAI
 
-from src.config import GEMINI_API_KEY, PROXY_BASE_URL, SQLITE_DB_PATH
+from src.config import SQLITE_DB_PATH
 from src.state import AgentState
 from src.safe_tools import read_sql
 
 _db = SQLDatabase.from_uri(f"sqlite:///{SQLITE_DB_PATH}")
-_llm = ChatOpenAI(base_url=PROXY_BASE_URL, api_key=GEMINI_API_KEY, model=os.getenv("GEMINI_MODEL", "gemini-flash-lite"), timeout=15, max_retries=0)
+_llm = create_chat_model()
 
 
 def data_agent(state: AgentState) -> dict:
