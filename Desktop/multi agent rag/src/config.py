@@ -5,12 +5,15 @@ agent call is automatically traced and visible in your Langfuse dashboard.
 If the keys are missing, the project runs fine without any tracing.
 """
 import os
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parents[1]
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(BASE_DIR / ".env")
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-PROXY_BASE_URL = os.getenv("PROXY_BASE_URL")
+PROXY_BASE_URL = os.getenv("PROXY_BASE_URL", "https://saidazam-litellm-proxy.hf.space/v1")
 GEMINI_MODEL = os.getenv("GEMINI_MODEL")
 GEMINI_LITE_MODEL = os.getenv("GEMINI_LITE_MODEL")
 GEMINI_EMBED_MODEL = os.getenv("GEMINI_EMBED_MODEL")
@@ -18,9 +21,9 @@ TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
 LANGFUSE_PUBLIC_KEY = os.getenv("LANGFUSE_PUBLIC_KEY")
 LANGFUSE_SECRET_KEY = os.getenv("LANGFUSE_SECRET_KEY")
 
-VECTOR_DB_PATH = "data/qdrant_db"
+VECTOR_DB_PATH = str(BASE_DIR / "data/qdrant_db")
 COLLECTION_NAME = "company_docs"
-SQLITE_DB_PATH = "data/company.db"
+SQLITE_DB_PATH = str(BASE_DIR / "data/company.db")
 
 if not GEMINI_API_KEY:
     raise RuntimeError(

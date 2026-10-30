@@ -1,7 +1,14 @@
 import { useState, useRef, useEffect } from "react";
 import { Send, Bot, User, Loader2, Activity } from "lucide-react";
 
-const API = "https://multi-agent-ai-analyst-jw34.onrender.com";
+const API = (import.meta.env.VITE_API_URL || "https://multi-agent-ai-analyst-jw34.onrender.com").replace(/\/$/, "");
+const SESSION = (() => {
+  try {
+    let value = sessionStorage.getItem('analyst-session');
+    if (!value) { value = crypto.randomUUID(); sessionStorage.setItem('analyst-session', value); }
+    return value;
+  } catch { return crypto.randomUUID(); }
+})();
 
 export default function App() {
   const [messages, setMessages] = useState([
@@ -27,23 +34,28 @@ export default function App() {
     setMessages((prev) => [...prev, { role: "user", content: question }]);
     setLoading(true);
 
+    const controller = new AbortController();
+    const deadline = setTimeout(() => controller.abort(), 90000);
     try {
       const res = await fetch(`${API}/chat`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "X-Session-ID": SESSION },
+        signal: controller.signal,
         body: JSON.stringify({ question }),
       });
       const data = await res.json();
+      if (!res.ok || typeof data.answer !== "string" || !data.answer.trim()) throw new Error(data.detail || "Invalid response");
       setMessages((prev) => [
         ...prev,
         { role: "assistant", content: data.answer, steps: data.steps },
       ]);
-    } catch (err) {
+    } catch {
       setMessages((prev) => [
         ...prev,
         { role: "assistant", content: "❌ Error connecting to the API. Is the server running?", steps: [] },
       ]);
     } finally {
+      clearTimeout(deadline);
       setLoading(false);
     }
   }
@@ -61,7 +73,7 @@ export default function App() {
       <div style={styles.header}>
         <Bot size={24} color="#fff" />
         <span style={styles.headerTitle}>Multi-Agent AI Analyst</span>
-        <span style={styles.headerBadge}>● Live</span>
+        <span style={styles.headerBadge}>AI Analyst</span>
       </div>
 
       {/* Messages */}

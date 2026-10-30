@@ -1,3 +1,4 @@
+import os
 """
 Feature 5: Data agent (text-to-SQL).
 Writes a SQL query from a plain-English question, runs it against the
@@ -13,9 +14,10 @@ from langchain_openai import ChatOpenAI
 
 from src.config import GEMINI_API_KEY, PROXY_BASE_URL, SQLITE_DB_PATH
 from src.state import AgentState
+from src.safe_tools import read_sql
 
 _db = SQLDatabase.from_uri(f"sqlite:///{SQLITE_DB_PATH}")
-_llm = ChatOpenAI(base_url=PROXY_BASE_URL, api_key=GEMINI_API_KEY, model="gemini-flash-lite")
+_llm = ChatOpenAI(base_url=PROXY_BASE_URL, api_key=GEMINI_API_KEY, model=os.getenv("GEMINI_MODEL", "gemini-flash-lite"), timeout=15, max_retries=0)
 
 
 def data_agent(state: AgentState) -> dict:
@@ -32,7 +34,7 @@ def data_agent(state: AgentState) -> dict:
     if not sql.lower().startswith("select"):
         result = "Refused: generated query was not a SELECT statement."
     else:
-        result = _db.run(sql)
+        result = str(read_sql(SQLITE_DB_PATH, sql))
 
     return {
         "sql_result": f"SQL: {sql}\nResult: {result}",

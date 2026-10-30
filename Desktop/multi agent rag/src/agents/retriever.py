@@ -24,7 +24,10 @@ def _get_vectorstore():
 
 def retriever_agent(state: AgentState) -> dict:
     vectorstore = _get_vectorstore()
-    docs = vectorstore.as_retriever(search_kwargs={"k": 4}).invoke(state["question"])
+    try:
+        docs = vectorstore.as_retriever(search_kwargs={"k": 4}).invoke(state["question"])
+    finally:
+        vectorstore.client.close()
     return {
         "documents": state.get("documents", []) + [d.page_content for d in docs],
         "steps": state.get("steps", []) + ["retriever"],

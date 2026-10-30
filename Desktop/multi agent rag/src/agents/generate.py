@@ -1,3 +1,4 @@
+import os
 """
 Feature 9 (generate step) — PHASE 4 UPDATE: includes chat_history so
 the generated answer is aware of what was already said in this conversation.
@@ -7,7 +8,7 @@ from langchain_openai import ChatOpenAI
 from src.config import GEMINI_API_KEY, PROXY_BASE_URL
 from src.state import AgentState
 
-_llm = ChatOpenAI(base_url=PROXY_BASE_URL, api_key=GEMINI_API_KEY, model="gemini-flash-lite")
+_llm = ChatOpenAI(base_url=PROXY_BASE_URL, api_key=GEMINI_API_KEY, model=os.getenv("GEMINI_MODEL", "gemini-flash-lite"), timeout=15, max_retries=0)
 
 
 def generate_answer(state: AgentState) -> dict:

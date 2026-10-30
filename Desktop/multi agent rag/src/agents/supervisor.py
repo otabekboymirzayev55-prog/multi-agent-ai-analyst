@@ -1,3 +1,4 @@
+import os
 """
 Feature 7: Supervisor / Router.
 Routes question to the right agent. Forces finish if agents already ran.
@@ -6,7 +7,7 @@ from langchain_openai import ChatOpenAI
 from src.config import GEMINI_API_KEY, PROXY_BASE_URL
 from src.state import AgentState
 
-_llm = ChatOpenAI(base_url=PROXY_BASE_URL, api_key=GEMINI_API_KEY, model="gemini-flash-lite")
+_llm = ChatOpenAI(base_url=PROXY_BASE_URL, api_key=GEMINI_API_KEY, model=os.getenv("GEMINI_MODEL", "gemini-flash-lite"), timeout=15, max_retries=0)
 VALID_ROUTES = {"retriever", "web", "data", "code", "finish"}
 
 def supervisor(state: AgentState) -> dict:
